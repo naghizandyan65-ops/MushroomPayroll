@@ -21,7 +21,7 @@ jobs:
       - name: نصب EAS
         run: npm install -g eas-cli
       
-      - name: نصب وابستگی‌ها
+      - name: نصب وابستگی‌ها با نسخه‌های سازگار
         run: npm install --legacy-peer-deps
       
       - name: لاگین به Expo

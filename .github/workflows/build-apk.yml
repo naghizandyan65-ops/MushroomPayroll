@@ -1,4 +1,4 @@
-name: ساخت APK با Expo
+name: ساخت APK
 
 on:
   push:
@@ -6,28 +6,32 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-android:
+  build:
     runs-on: ubuntu-latest
     
     steps:
       - name: دریافت کد
         uses: actions/checkout@v4
       
+      - name: نمایش لیست فایل‌ها (برای عیب‌یابی)
+        run: ls -la
+      
       - name: نصب Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
       
-      - name: نصب وابستگی‌ها
-        run: |
-          npm install
-          npx expo install
+      - name: نصب EAS
+        run: npm install -g eas-cli
       
-      - name: ساخت APK با Expo
-        run: |
-          npx expo export:embed
-          npx expo run:android --variant release
-        continue-on-error: true
+      - name: نصب وابستگی‌ها
+        run: npm install
+      
+      - name: لاگین به Expo
+        run: eas login --token ${{ secrets.EXPO_TOKEN }}
+      
+      - name: ساخت APK
+        run: eas build --platform android --profile preview --non-interactive
       
       - name: پیدا کردن APK
         run: |

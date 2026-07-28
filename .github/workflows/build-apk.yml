@@ -21,10 +21,13 @@ jobs:
       - name: نصب EAS
         run: npm install -g eas-cli
       
+      - name: تنظیم توکن
+        run: echo "EXPO_TOKEN=${{ secrets.EXPO_TOKEN }}" >> $GITHUB_ENV
+      
       - name: نصب وابستگی‌ها
         run: npm install --legacy-peer-deps
       
-      - name: ساخت APK با EAS
+      - name: ساخت APK
         run: eas build --platform android --profile preview --non-interactive
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}

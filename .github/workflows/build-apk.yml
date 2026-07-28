@@ -8,17 +8,36 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: دریافت کد
+        uses: actions/checkout@v4
+      
+      - name: نصب Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 18
-      - uses: expo/expo-github-actions@v8
+          cache: 'npm'
+      
+      - name: نصب Expo و EAS
+        run: |
+          npm install -g expo-cli
+          npm install -g eas-cli
+      
+      - name: نصب وابستگی‌ها
+        run: npm install
+      
+      - name: لاگین به Expo
+        run: eas login --token ${{ secrets.EXPO_TOKEN }}
+      
+      - name: ساخت APK
+        run: |
+          eas build --platform android --profile preview --non-interactive --output=app-release.apk
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+      
+      - name: آپلود خروجی
+        uses: actions/upload-artifact@v4
         with:
-          token: ${{ secrets.EXPO_TOKEN }}
-      - run: npm install
-      - run: eas build -p android --profile preview --non-interactive
-      - uses: actions/upload-artifact@v4
-        with:
-          name: my-app
+          name: app-release
           path: app-release.apk

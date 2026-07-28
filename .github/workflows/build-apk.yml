@@ -21,14 +21,13 @@ jobs:
       - name: نصب EAS
         run: npm install -g eas-cli
       
-      - name: نصب وابستگی‌ها با نسخه‌های سازگار
+      - name: نصب وابستگی‌ها
         run: npm install --legacy-peer-deps
       
-      - name: لاگین به Expo
-        run: eas login --token ${{ secrets.EXPO_TOKEN }}
-      
-      - name: ساخت APK
+      - name: ساخت APK با EAS
         run: eas build --platform android --profile preview --non-interactive
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
       
       - name: پیدا کردن APK
         run: |
